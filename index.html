@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Theming Engine & Unified Design System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9;
+            color: #1c1917;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-btn.active {
+            border-bottom: 2px solid #1c1917;
+            color: #1c1917;
+            font-weight: 600;
+        }
+        .step-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .step-card:hover, .step-card.active-step {
+            border-color: #1c1917;
+            background-color: #f5f5f4;
+            transform: translateY(-2px);
+        }
+        .hierarchy-box {
+            transition: all 0.2s;
+        }
+        .hierarchy-box:hover {
+            background-color: #e7e5e4;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-stone-200">
+
+    <!-- Chosen Palette: Warm Neutrals (Stone/Slate) for calm harmony, highly minimal. #fafaf9 (bg), #1c1917 (primary text/accents), #f5f5f4 (surfaces). -->
+    <!-- Application Structure Plan: A tabbed dashboard interface. This structures the complex architectural and business report into consumable, task-oriented views (Business Impact, Architecture, Workflow, Roadmap) prioritizing logical flow and preventing overwhelming vertical scrolling. -->
+    <!-- Visualization & Content Choices: 1. Bar Chart (Chart.js) -> Compare manual vs automated time -> Shows immediate ROI. 2. Interactive CSS Grid -> Token Hierarchy -> Explains abstract concepts interactively. 3. Interactive Steps (HTML/JS) -> Pipeline -> Breaks down the Figma-to-Code flow without using SVG flowcharts. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <header class="mb-10">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-6">
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tight text-stone-900">Unified Design System</h1>
+                    <p class="text-lg text-stone-500 mt-1">Automated Theming Engine & Headless Design-to-Code Pipeline</p>
+                </div>
+                <div class="hidden md:block bg-stone-100 text-stone-700 px-4 py-2 rounded-md text-sm font-medium border border-stone-200">
+                    Status: <span class="text-stone-900 font-bold">Ready for Approval</span>
+                </div>
+            </div>
+        </header>
+
+        <nav class="flex space-x-8 mb-8 border-b border-stone-200 overflow-x-auto" aria-label="Tabs">
+            <button onclick="switchTab('tab-business')" class="nav-btn active whitespace-nowrap py-3 px-1 text-sm font-medium text-stone-500 hover:text-stone-800 focus:outline-none">Business Model</button>
+            <button onclick="switchTab('tab-architecture')" class="nav-btn whitespace-nowrap py-3 px-1 text-sm font-medium text-stone-500 hover:text-stone-800 focus:outline-none">Technical Architecture</button>
+            <button onclick="switchTab('tab-workflow')" class="nav-btn whitespace-nowrap py-3 px-1 text-sm font-medium text-stone-500 hover:text-stone-800 focus:outline-none">Design Pipeline</button>
+            <button onclick="switchTab('tab-roadmap')" class="nav-btn whitespace-nowrap py-3 px-1 text-sm font-medium text-stone-500 hover:text-stone-800 focus:outline-none">Roadmap & Execution</button>
+        </nav>
+
+        <main>
+            <section id="tab-business" class="tab-content active">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-3">Design System as a Service (DSaaS)</h2>
+                    <p class="text-stone-600 leading-relaxed max-w-4xl">
+                        This section outlines the core business rationale for the transition. By pivoting from manual UI revamps to a configuration-driven maintenance model, we decouple our software logic from visual presentation. This enables high-margin, recurring revenue from our 10-year legacy client base by drastically reducing UI refresh timelines.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <div class="bg-white p-6 border border-stone-200 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-medium mb-4 border-b border-stone-100 pb-2">Operational Impact: Time to Refresh</h3>
+                        <p class="text-sm text-stone-500 mb-6">This chart illustrates the projected reduction in man-hours required to completely theme an existing legacy application suite using the new Headless pipeline.</p>
+                        <div class="chart-container">
+                            <canvas id="impactChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 border border-stone-200 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-medium mb-3">Strategic Value Proposition</h3>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-6 w-6 rounded-full bg-stone-100 text-stone-800 flex items-center justify-center font-bold text-sm mr-3">&#10003;</span>
+                                    <div>
+                                        <span class="font-semibold block text-stone-800">Decoupled Architecture</span>
+                                        <span class="text-sm text-stone-600">Software logic (Core) is strictly separated from visual presentation (Skin).</span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-6 w-6 rounded-full bg-stone-100 text-stone-800 flex items-center justify-center font-bold text-sm mr-3">&#10003;</span>
+                                    <div>
+                                        <span class="font-semibold block text-stone-800">High-Margin Recurring Revenue</span>
+                                        <span class="text-sm text-stone-600">Transforming heavy, project-based UI updates into lightweight, configuration-based subscription services.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-stone-800 text-stone-50 p-6 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-medium mb-3">Competitive Advantage</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <span class="block font-bold text-stone-300 mb-1">Reduced Costs</span>
+                                    No per-seat licensing fees required for external tools like Supernova or Specify.
+                                </div>
+                                <div>
+                                    <span class="block font-bold text-stone-300 mb-1">Legacy Integration</span>
+                                    Custom-built to natively handle our specific 10-year-old software architecture nuances.
+                                </div>
+                                <div>
+                                    <span class="block font-bold text-stone-300 mb-1">Extreme Efficiency</span>
+                                    A single designer can seamlessly manage the visual identity of 50+ clients simultaneously.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-architecture" class="tab-content">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-3">Technical Stack & Token Hierarchy</h2>
+                    <p class="text-stone-600 leading-relaxed max-w-4xl">
+                        This section details the infrastructure enabling the automated theming engine. Interact with the Token Hierarchy diagram to understand how abstract values cascade into specific component styles without breaking the core application logic.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="bg-white p-5 border border-stone-200 rounded-lg">
+                            <h4 class="font-semibold text-stone-900 mb-2">Styling Framework</h4>
+                            <p class="text-sm text-stone-600">Tailwind CSS utilized strictly via Utility-First principles.</p>
+                        </div>
+                        <div class="bg-white p-5 border border-stone-200 rounded-lg">
+                            <h4 class="font-semibold text-stone-900 mb-2">Theming Engine</h4>
+                            <p class="text-sm text-stone-600">CSS Custom Properties (Variables) dynamically injected at runtime.</p>
+                        </div>
+                        <div class="bg-white p-5 border border-stone-200 rounded-lg">
+                            <h4 class="font-semibold text-stone-900 mb-2">Documentation & Build</h4>
+                            <p class="text-sm text-stone-600">VitePress for static developer sites; Vite + PostCSS for the build pipeline.</p>
+                        </div>
+                        <div class="bg-white p-5 border border-stone-200 rounded-lg">
+                            <h4 class="font-semibold text-stone-900 mb-2">Data Transformation</h4>
+                            <p class="text-sm text-stone-600">Style Dictionary used for cross-platform token delivery and formatting.</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-8 bg-white p-6 border border-stone-200 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-medium mb-4">Interactive Token Hierarchy</h3>
+                        <p class="text-sm text-stone-500 mb-6">Select a tier to view its definition, examples, and role within the decoupled architecture.</p>
+
+                        <div class="flex flex-col space-y-3 mb-8 relative">
+                            <div class="absolute left-6 top-6 bottom-6 w-0.5 bg-stone-200 z-0"></div>
+                            
+                            <div class="hierarchy-box relative z-10 flex items-center p-4 border border-stone-200 rounded-md bg-stone-50" onclick="updateTokenDetails('primitives', this)">
+                                <div class="w-8 h-8 rounded-full bg-stone-800 text-white flex items-center justify-center font-bold mr-4 text-sm">1</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-stone-900">Primitives</h4>
+                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Base Layer</span>
+                                </div>
+                                <div class="text-stone-400 font-bold">&#8594;</div>
+                            </div>
+                            
+                            <div class="hierarchy-box relative z-10 flex items-center p-4 border border-stone-200 rounded-md bg-white" onclick="updateTokenDetails('semantic', this)">
+                                <div class="w-8 h-8 rounded-full bg-stone-300 text-stone-800 flex items-center justify-center font-bold mr-4 text-sm">2</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-stone-900">Semantic Tokens</h4>
+                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Intent Layer</span>
+                                </div>
+                                <div class="text-stone-400 font-bold">&#8594;</div>
+                            </div>
+                            
+                            <div class="hierarchy-box relative z-10 flex items-center p-4 border border-stone-200 rounded-md bg-white" onclick="updateTokenDetails('component', this)">
+                                <div class="w-8 h-8 rounded-full bg-stone-300 text-stone-800 flex items-center justify-center font-bold mr-4 text-sm">3</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-stone-900">Component Tokens</h4>
+                                    <span class="text-xs text-stone-500 uppercase tracking-wider">Override Layer</span>
+                                </div>
+                                <div class="text-stone-400 font-bold">&#8594;</div>
+                            </div>
+                        </div>
+
+                        <div id="token-details" class="bg-stone-100 p-5 rounded-md border border-stone-200 min-h-[140px]">
+                            <h4 class="font-bold text-stone-900 text-lg mb-2">Primitives</h4>
+                            <p class="text-sm text-stone-700 mb-3">Raw, absolute values without context. These define the absolute limits of the design palette but are never used directly in component styling.</p>
+                            <code class="block bg-stone-800 text-stone-200 p-2 rounded text-xs font-mono">Example: palette-blue-500: #3b82f6</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-workflow" class="tab-content">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-3">Figma-to-Code Implementation Pipeline</h2>
+                    <p class="text-stone-600 leading-relaxed max-w-4xl">
+                        This workflow outlines the automated delivery process. By standardizing the design start point and utilizing middleware, we eliminate manual CSS writing. Click on each step to see detailed responsibilities.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <div class="step-card active-step border border-stone-200 p-4 rounded-lg cursor-pointer bg-f5f5f4" onclick="updateWorkflowDetails('branch', this)">
+                        <div class="text-xs font-bold text-stone-400 mb-1">STEP 1</div>
+                        <h4 class="font-bold text-stone-900">Branching & Skinning</h4>
+                    </div>
+                    <div class="step-card border border-stone-200 p-4 rounded-lg cursor-pointer bg-white" onclick="updateWorkflowDetails('middleware', this)">
+                        <div class="text-xs font-bold text-stone-400 mb-1">STEP 2</div>
+                        <h4 class="font-bold text-stone-900">Middleware Triggers</h4>
+                    </div>
+                    <div class="step-card border border-stone-200 p-4 rounded-lg cursor-pointer bg-white" onclick="updateWorkflowDetails('transform', this)">
+                        <div class="text-xs font-bold text-stone-400 mb-1">STEP 3</div>
+                        <h4 class="font-bold text-stone-900">Data Transformation</h4>
+                    </div>
+                    <div class="step-card border border-stone-200 p-4 rounded-lg cursor-pointer bg-white" onclick="updateWorkflowDetails('deploy', this)">
+                        <div class="text-xs font-bold text-stone-400 mb-1">STEP 4</div>
+                        <h4 class="font-bold text-stone-900">Deployment</h4>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-stone-200 rounded-lg p-8 shadow-sm flex flex-col md:flex-row gap-8 items-center min-h-[250px]">
+                    <div class="w-full md:w-1/3 flex justify-center">
+                        <div id="workflow-icon" class="text-6xl text-stone-300 font-bold border-4 border-stone-100 rounded-full w-32 h-32 flex items-center justify-center shadow-inner bg-stone-50">
+                            &#9998;
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <h3 id="workflow-title" class="text-2xl font-bold text-stone-900 mb-4">Design Workflow: The Master Kit</h3>
+                        <ul id="workflow-list" class="space-y-3 text-stone-600">
+                            <li><strong>Branching:</strong> Designers no longer start from scratch. They clone the Master Headless UI Starter Kit.</li>
+                            <li><strong>Skinning:</strong> Designers update "Variable Modes" within Figma (colors, spacing, radius) rather than drawing new components.</li>
+                            <li><strong>Validation:</strong> The design is verified within Figma's native Modes (e.g., Light, Dark, Compact).</li>
+                            <li><strong>Export:</strong> Tokens are pushed via API or Tokens Studio plugin.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-roadmap" class="tab-content">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-3">Execution Roadmap</h2>
+                    <p class="text-stone-600 leading-relaxed max-w-4xl">
+                        The phased approach to implementing the Design System as a Service model across the organization.
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="border-l-4 border-stone-800 pl-6 py-2 relative">
+                        <div class="absolute w-3 h-3 bg-stone-800 rounded-full -left-[8px] top-4 border-2 border-white"></div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1 block">Phase 1: Current</span>
+                        <h3 class="text-xl font-bold text-stone-900 mb-2">Foundation</h3>
+                        <div class="bg-white border border-stone-200 rounded p-4 text-sm text-stone-700">
+                            <ul class="list-disc pl-5 space-y-1 marker:text-stone-400">
+                                <li>Finalize Semantic Naming Convention mapping.</li>
+                                <li>Build and distribute the Master Figma Starter Kit.</li>
+                                <li>Configure Tailwind CSS to consume dynamic CSS Variables.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-stone-300 pl-6 py-2 relative">
+                        <div class="absolute w-3 h-3 bg-stone-300 rounded-full -left-[8px] top-4 border-2 border-white"></div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1 block">Phase 2: Next</span>
+                        <h3 class="text-xl font-bold text-stone-900 mb-2">Documentation (VitePress)</h3>
+                        <div class="bg-white border border-stone-200 rounded p-4 text-sm text-stone-700">
+                            <ul class="list-disc pl-5 space-y-1 marker:text-stone-400">
+                                <li>Launch the internal VitePress documentation site.</li>
+                                <li>Document Atomic Components (Buttons, Inputs, Modals) with live token previews.</li>
+                                <li>Create the standard "Onboarding Guide" for new client themes.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-stone-200 pl-6 py-2 relative">
+                        <div class="absolute w-3 h-3 bg-stone-200 rounded-full -left-[8px] top-4 border-2 border-white"></div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1 block">Phase 3: Future</span>
+                        <h3 class="text-xl font-bold text-stone-900 mb-2">Automation & Migration</h3>
+                        <div class="bg-white border border-stone-200 rounded p-4 text-sm text-stone-700">
+                            <ul class="list-disc pl-5 space-y-1 marker:text-stone-400">
+                                <li>Establish Figma API continuous sync via GitHub Actions.</li>
+                                <li>Implement the "Strangler Fig" pattern for migrating 10-year-old legacy software iteratively.</li>
+                                <li>Deploy the first fully automated "UI Refresh" for a live pilot client.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const tokenData = {
+            primitives: {
+                title: "Primitives",
+                desc: "Raw, absolute values without context. These define the absolute limits of the design palette but are never used directly in component styling.",
+                code: "Example: palette-blue-500: #3b82f6"
+            },
+            semantic: {
+                title: "Semantic Tokens",
+                desc: "Tokens mapped to functional intent. This creates the primary abstraction layer allowing themes to change without altering component code.",
+                code: "Example: action-primary-bg: var(--palette-blue-500)"
+            },
+            component: {
+                title: "Component Tokens",
+                desc: "Highly specific overrides mapped to exact UI elements. Used only when a component must deviate from the semantic baseline.",
+                code: "Example: button-radius-lg: 0.5rem"
+            }
+        };
+
+        const workflowData = {
+            branch: {
+                icon: "&#9998;",
+                title: "Design Workflow: The Master Kit",
+                items: [
+                    "<strong>Branching:</strong> Designers clone the Master Headless UI Starter Kit.",
+                    "<strong>Skinning:</strong> Designers update 'Variable Modes' within Figma (colors, spacing, radius).",
+                    "<strong>Validation:</strong> Verified within Figma's native Modes (Light/Dark/Compact).",
+                    "<strong>Export:</strong> Tokens pushed via API/Tokens Studio to central repository."
+                ]
+            },
+            middleware: {
+                icon: "&#8644;",
+                title: "Middleware Integration",
+                items: [
+                    "<strong>Trigger:</strong> GitHub Action fires upon a new 'Version Release' detected in the Figma file.",
+                    "<strong>Source of Truth:</strong> Figma Variables remain the sole source of design data.",
+                    "<strong>Validation:</strong> CI/CD checks for naming convention adherence before accepting the payload."
+                ]
+            },
+            transform: {
+                icon: "&#9881;",
+                title: "Data Transformation",
+                items: [
+                    "<strong>Engine:</strong> Style Dictionary processes the raw JSON payload.",
+                    "<strong>Output 1:</strong> Generates dynamic `tailwind.config.js` extensions.",
+                    "<strong>Output 2:</strong> Generates `global.css` root variables for runtime injection.",
+                    "<strong>Cross-platform:</strong> Prepares formatting for potential future mobile platforms."
+                ]
+            },
+            deploy: {
+                icon: "&#10004;",
+                title: "Automated Deployment",
+                items: [
+                    "<strong>Documentation Sync:</strong> VitePress site auto-updates to reflect live token values.",
+                    "<strong>Playground:</strong> Provides real-time interactive previews for developers.",
+                    "<strong>Client Update:</strong> Modified `global.css` is pushed to the client environment, instantly revamping the application skin."
+                ]
+            }
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function updateTokenDetails(key, element) {
+            document.querySelectorAll('.hierarchy-box').forEach(box => {
+                box.classList.remove('bg-stone-50');
+                box.classList.add('bg-white');
+                box.children[0].classList.remove('bg-stone-800', 'text-white');
+                box.children[0].classList.add('bg-stone-300', 'text-stone-800');
+            });
+            
+            element.classList.remove('bg-white');
+            element.classList.add('bg-stone-50');
+            element.children[0].classList.remove('bg-stone-300', 'text-stone-800');
+            element.children[0].classList.add('bg-stone-800', 'text-white');
+
+            const data = tokenData[key];
+            const detailContainer = document.getElementById('token-details');
+            
+            detailContainer.style.opacity = 0;
+            setTimeout(() => {
+                detailContainer.innerHTML = `
+                    <h4 class="font-bold text-stone-900 text-lg mb-2">${data.title}</h4>
+                    <p class="text-sm text-stone-700 mb-3">${data.desc}</p>
+                    <code class="block bg-stone-800 text-stone-200 p-2 rounded text-xs font-mono">${data.code}</code>
+                `;
+                detailContainer.style.opacity = 1;
+            }, 150);
+        }
+
+        function updateWorkflowDetails(key, element) {
+            document.querySelectorAll('.step-card').forEach(card => {
+                card.classList.remove('active-step', 'bg-f5f5f4');
+                card.classList.add('bg-white');
+            });
+            element.classList.add('active-step', 'bg-f5f5f4');
+            element.classList.remove('bg-white');
+
+            const data = workflowData[key];
+            const listHtml = data.items.map(item => `<li>${item}</li>`).join('');
+            
+            document.getElementById('workflow-icon').innerHTML = data.icon;
+            document.getElementById('workflow-title').innerText = data.title;
+            document.getElementById('workflow-list').innerHTML = listHtml;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Legacy Manual Update', 'Automated Token Injection'],
+                    datasets: [{
+                        label: 'Estimated Time to Refresh (Days)',
+                        data: [14, 0.5],
+                        backgroundColor: [
+                            'rgba(28, 25, 23, 0.8)',
+                            'rgba(59, 130, 246, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(28, 25, 23)',
+                            'rgb(37, 99, 235)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' Days';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Days of Engineering Effort',
+                                color: '#78716c'
+                            },
+                            grid: { color: '#f5f5f4' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
